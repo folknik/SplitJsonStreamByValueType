@@ -4,6 +4,9 @@ from pyspark.sql.types import StructType, StructField, StringType, LongType, Int
 from lib.logger import Log4j
 
 
+KAFKA_BROKER = "localhost:9092"
+
+
 if __name__ == "__main__":
     spark = SparkSession \
         .builder \
@@ -17,7 +20,7 @@ if __name__ == "__main__":
     kafka_source_df = spark \
         .readStream \
         .format("kafka") \
-        .option("kafka.bootstrap.servers", "localhost:9092") \
+        .option("kafka.bootstrap.servers", KAFKA_BROKER) \
         .option("subscribe", "sensors") \
         .option("startingOffsets", "earliest") \
         .load()
@@ -52,7 +55,7 @@ if __name__ == "__main__":
         .writeStream \
         .queryName("Bool Value Writer") \
         .format("kafka") \
-        .option("kafka.bootstrap.servers", "localhost:9092") \
+        .option("kafka.bootstrap.servers", KAFKA_BROKER) \
         .option("topic", "bool-sensors") \
         .outputMode("append") \
         .option("checkpointLocation", "chk-point-dir/bool") \
@@ -62,7 +65,7 @@ if __name__ == "__main__":
         .writeStream \
         .queryName("Integer Value Writer") \
         .format("kafka") \
-        .option("kafka.bootstrap.servers", "localhost:9092") \
+        .option("kafka.bootstrap.servers", KAFKA_BROKER) \
         .option("topic", "int-sensors") \
         .outputMode("append") \
         .option("checkpointLocation", "chk-point-dir/int") \
@@ -72,7 +75,7 @@ if __name__ == "__main__":
         .writeStream \
         .queryName("Real Value Writer") \
         .format("kafka") \
-        .option("kafka.bootstrap.servers", "localhost:9092") \
+        .option("kafka.bootstrap.servers", KAFKA_BROKER) \
         .option("topic", "real-sensors") \
         .outputMode("append") \
         .option("checkpointLocation", "chk-point-dir/real") \
