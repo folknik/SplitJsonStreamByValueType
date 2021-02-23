@@ -36,7 +36,7 @@ if __name__ == "__main__":
         .selectExpr("*", "(DoubleType - IntegerType) as Diff") \
         .selectExpr("*", "CASE WHEN Diff == 0 THEN 'int' ELSE '' END AS Integer") \
         .selectExpr("*", "CASE WHEN Diff > 0 THEN 'real' ELSE '' END AS Double") \
-        .selectExpr("*", "CASE WHEN Boolean <> '' THEN Boolean WHEN Integer <> '' THEN Integer WHEN Double <> '' THEN Double ELSE '' END AS ValueType") \
+        .selectExpr("*", "CASE WHEN Boolean <> '' THEN 'bool' WHEN Integer <> '' THEN 'int' WHEN Double <> '' THEN 'real' ELSE '' END AS ValueType") \
         .select("SensorNumber", "CreatedTime", "Value", "ValueType")
 
     bool_df = sensor_data_df.filter(col("ValueType") == "bool").select("SensorNumber", "CreatedTime", "Value")
