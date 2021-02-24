@@ -1,0 +1,10 @@
+{
+  "type": "record",
+  "name": "sample",
+  "namespace": "example.avro",
+  "fields": [
+    {"name": "SensorNumber", "type": "string"},
+    {"name": "CreatedTime", "type": "long"},
+    {"name": "Value", "type": ["string", "null"]}
+  ]
+}
