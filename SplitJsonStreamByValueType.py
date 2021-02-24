@@ -1,4 +1,5 @@
 from pyspark.sql import SparkSession
+from pyspark.sql.avro.functions import to_avro
 from pyspark.sql.functions import expr, col, from_json, to_json, struct
 from pyspark.sql.types import StructType, StructField, StringType, LongType, IntegerType, DoubleType
 from lib.logger import Log4j
@@ -43,13 +44,13 @@ if __name__ == "__main__":
         .select("SensorNumber", "CreatedTime", "Value", "ValueType")
 
     bool_df = sensor_data_df.filter(col("ValueType") == "bool").select("SensorNumber", "CreatedTime", "Value")
-    kafka_bool_df = bool_df.select(expr("SensorNumber as key"), to_json(struct("SensorNumber", "CreatedTime", "Value")).alias("value"))
+    kafka_bool_df = bool_df.select(expr("SensorNumber as key"), to_avro(struct("SensorNumber", "CreatedTime", "Value")).alias("value"))
 
     int_df = sensor_data_df.filter(col("ValueType") == "int").select("SensorNumber", "CreatedTime", "Value")
-    kafka_int_df = int_df.select(expr("SensorNumber as key"), to_json(struct("SensorNumber", "CreatedTime", "Value")).alias("value"))
+    kafka_int_df = int_df.select(expr("SensorNumber as key"), to_avro(struct("SensorNumber", "CreatedTime", "Value")).alias("value"))
 
     real_df = sensor_data_df.filter(col("ValueType") == "real").select("SensorNumber", "CreatedTime", "Value")
-    kafka_real_df = real_df.select(expr("SensorNumber as key"), to_json(struct("SensorNumber", "CreatedTime", "Value")).alias("value"))
+    kafka_real_df = real_df.select(expr("SensorNumber as key"), to_avro(struct("SensorNumber", "CreatedTime", "Value")).alias("value"))
 
     bool_writer_query = kafka_bool_df \
         .writeStream \
